@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JS Method Lab</title>
+<style>
+  :root{
+    --bg:#F4F5F2;
+    --panel:#FFFFFF;
+    --ink:#1D2230;
+    --muted:#6B7280;
+    --accent:#2F6F5E;
+    --accent-soft:#E4EFEA;
+    --rule:#D9DCD3;
+    --code-bg:#111522;
+    --code-text:#D7E4DC;
+    --mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:48px 24px 96px;}
+
+  header.top{margin-bottom:36px;}
+  .kicker{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.16em;
+    color:var(--accent);
+    text-transform:uppercase;
+    margin:0 0 10px;
+  }
+  h1{
+    font-size:32px;
+    line-height:1.15;
+    margin:0 0 8px;
+    letter-spacing:-0.02em;
+    font-weight:700;
+  }
+  .sub{color:var(--muted);font-size:14.5px;max-width:560px;line-height:1.5;margin:0;}
+
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin:32px 0 28px;
+    border-bottom:1px solid var(--rule);
+  }
+  .tab{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.04em;
+    padding:10px 4px;
+    margin-right:22px;
+    background:none;
+    border:none;
+    color:var(--muted);
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transform:translateY(1px);
+  }
+  .tab.active{color:var(--ink);border-bottom-color:var(--accent);}
+  .tab .count{color:var(--accent);}
+
+  .dataset{
+    background:var(--code-bg);
+    color:var(--code-text);
+    border-radius:10px;
+    padding:16px 18px;
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.6;
+    overflow-x:auto;
+    margin-bottom:32px;
+    white-space:pre;
+  }
+  .dataset .lbl{
+    color:#8FA99C;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:8px;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:12px;
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .card-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .num{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--muted);
+    width:20px;
+    flex-shrink:0;
+  }
+  .q{font-size:14.5px;font-weight:600;margin:0;flex:1;min-width:180px;}
+  .badge{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.03em;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:3px 9px;
+    white-space:nowrap;
+  }
+  pre.code{
+    background:var(--code-bg);
+    color:var(--code-text);
+    border-radius:8px;
+    padding:12px 14px;
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.55;
+    overflow-x:auto;
+    margin:0 0 12px;
+  }
+  .code .fn{color:#7FC8A9;}
+  .code .str{color:#E3B778;}
+  .code .cm{color:#5C6577;}
+
+  .out-lbl{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.14em;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin:0 0 6px;
+  }
+  .out{
+    font-size:13px;
+    line-height:1.6;
+  }
+  table{border-collapse:collapse;width:100%;font-size:12.5px;}
+  th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule);}
+  th{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .chip{
+    display:inline-block;
+    background:var(--accent-soft);
+    color:var(--accent);
+    border-radius:6px;
+    padding:2px 8px;
+    margin:2px 4px 2px 0;
+    font-family:var(--mono);
+    font-size:12px;
+  }
+  .val{
+    font-family:var(--mono);
+    font-weight:600;
+    color:var(--ink);
+  }
+  .true{color:#2F6F5E;}
+  .false{color:#B5473C;}
+  .panel-section{display:none;}
+  .panel-section.active{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">JS Method Lab</p>
+    <h1>Array &amp; String Methods, worked in place</h1>
+    <p class="sub">Each card runs one built-in method against the dataset live in your browser — code on top, real output underneath.</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="array">01 · Array Methods <span class="count">(10)</span></button>
+    <button class="tab" data-tab="string">02 · String Methods <span class="count">(8)</span></button>
+  </div>
+
+  <section id="array" class="panel-section active">
+    <div class="dataset"><span class="lbl">const employees =</span><span id="employees-raw"></span></div>
+    <div id="array-cards"></div>
+  </section>
+
+  <section id="string" class="panel-section">
+    <div class="dataset"><span class="lbl">const employeeNames =</span><span id="names-raw"></span></div>
+    <div id="string-cards"></div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   Dataset
+   ============================================================ */
+const employees = [
+  { id: 1, name: "Akash",  age: 24, salary: 25000, department: "IT" },
+  { id: 2, name: "Priya",  age: 27, salary: 40000, department: "HR" },
+  { id: 3, name: "John",   age: 30, salary: 55000, department: "Finance" },
+  { id: 4, name: "Yogesh", age: 22, salary: 28000, department: "IT" },
+  { id: 5, name: "Anu",    age: 26, salary: 35000, department: "HR" },
+];
+
+const employeeNames = [
+  "  Akash Kumar  ",
+  "Priya Sharma",
+  "John David",
+  "Anu Priya",
+  "Kiran Kumar",
+  "Nivetha S",
+  "Poorani Thirumurugan",
+  "Tanisha Rafiq",
+  "Arun Prakash",
+  "Meena Lakshmi",
+];
+
+/* ============================================================
+   1. ARRAY METHODS
+   ============================================================ */
+const arrayAnswers = [
+  {
+    q: "Display only IT employees.",
+    method: "filter()",
+    code: `employees.filter(e => e.department === "IT")`,
+    run: () => employees.filter(e => e.department === "IT"),
+  },
+  {
+    q: "Find employee with id = 3.",
+    method: "find()",
+    code: `employees.find(e => e.id === 3)`,
+    run: () => employees.find(e => e.id === 3),
+  },
+  {
+    q: "Find employee index.",
+    method: "findIndex()",
+    code: `employees.findIndex(e => e.id === 3)`,
+    run: () => employees.findIndex(e => e.id === 3),
+  },
+  {
+    q: "Increase every salary by 10%.",
+    method: "map()",
+    code: `employees.map(e => ({ ...e, salary: e.salary * 1.1 }))`,
+    run: () => employees.map(e => ({ ...e, salary: Math.round(e.salary * 1.1) })),
+  },
+  {
+    q: "Calculate total salary.",
+    method: "reduce()",
+    code: `employees.reduce((sum, e) => sum + e.salary, 0)`,
+    run: () => employees.reduce((sum, e) => sum + e.salary, 0),
+  },
+  {
+    q: "Sort salary ascending.",
+    method: "sort()",
+    code: `[...employees].sort((a, b) => a.salary - b.salary)`,
+    run: () => [...employees].sort((a, b) => a.salary - b.salary),
+  },
+  {
+    q: "Sort salary descending.",
+    method: "sort()",
+    code: `[...employees].sort((a, b) => b.salary - a.salary)`,
+    run: () => [...employees].sort((a, b) => b.salary - a.salary),
+  },
+  {
+    q: "Check if HR department exists.",
+    method: "some()",
+    code: `employees.some(e => e.department === "HR")`,
+    run: () => employees.some(e => e.department === "HR"),
+  },
+  {
+    q: "Check whether everyone earns above \u20b920,000.",
+    method: "every()",
+    code: `employees.every(e => e.salary > 20000)`,
+    run: () => employees.every(e => e.salary > 20000),
+  },
+  {
+    q: "Display only employee names.",
+    method: "map()",
+    code: `employees.map(e => e.name)`,
+    run: () => employees.map(e => e.name),
+  },
+];
+
+/* ============================================================
+   2. STRING METHODS
+   (each one applied across every name in employeeNames)
+   ============================================================ */
+function reverseSentence(str) {
+  return str.trim().split(/\s+/).reverse().join(" ");
+}
+function countWords(str) {
+  return str.trim().split(/\s+/).filter(Boolean).length;
+}
+function capitalizeFirst(str) {
+  const s = str.trim();
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+function removeExtraSpaces(str) {
+  return str.trim().replace(/\s+/g, " ");
+}
+function isPalindrome(str) {
+  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return clean.length > 0 && clean === clean.split("").reverse().join("");
+}
+function countVowels(str) {
+  return (str.match(/[aeiou]/gi) || []).length;
+}
+function countConsonants(str) {
+  return (str.match(/[a-z]/gi) || []).length - countVowels(str);
+}
+function removeDuplicateChars(str) {
+  return [...new Set(str.toLowerCase().replace(/\s+/g, ""))].join("");
+}
+
+const stringAnswers = [
+  {
+    q: "Reverse a sentence.",
+    method: "split() + reverse() + join()",
+    code: `str.trim().split(/\\s+/).reverse().join(" ")`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: reverseSentence(n) })),
+  },
+  {
+    q: "Count words.",
+    method: "split() + trim()",
+    code: `str.trim().split(/\\s+/).length`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: countWords(n) })),
+  },
+  {
+    q: "Capitalize first letter.",
+    method: "charAt() + toUpperCase() + slice()",
+    code: `str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: capitalizeFirst(n) })),
+  },
+  {
+    q: "Remove extra spaces.",
+    method: "trim() + replace()",
+    code: `str.trim().replace(/\\s+/g, " ")`,
+    run: () => employeeNames.map(n => ({ input: JSON.stringify(n), output: removeExtraSpaces(n) })),
+  },
+  {
+    q: "Check palindrome.",
+    method: "toLowerCase() + split() + reverse()",
+    code: `clean === clean.split("").reverse().join("")`,
+    run: () => [...employeeNames, "Madam", "Level", "Anna"].map(n => ({ input: n.trim(), output: isPalindrome(n) })),
+  },
+  {
+    q: "Count vowels.",
+    method: "match() + includes()-style test",
+    code: `(str.match(/[aeiou]/gi) || []).length`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: countVowels(n) })),
+  },
+  {
+    q: "Count consonants.",
+    method: "match()",
+    code: `letters.length - vowelCount`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: countConsonants(n) })),
+  },
+  {
+    q: "Remove duplicate characters.",
+    method: "Set + join()",
+    code: `[...new Set(str.toLowerCase())].join("")`,
+    run: () => employeeNames.map(n => ({ input: n.trim(), output: removeDuplicateChars(n) })),
+  },
+];
+
+/* ============================================================
+   Rendering helpers
+   ============================================================ */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function renderValue(val) {
+  if (Array.isArray(val)) {
+    if (val.length === 0) return `<span class="out">(empty)</span>`;
+    // array of employee objects
+    if (typeof val[0] === "object" && val[0] !== null && "department" in (val[0] || {})) {
+      const rows = val.map(e => `
+        <tr>
+          <td>${e.id}</td><td>${escapeHtml(e.name)}</td><td>${e.age}</td>
+          <td>\u20b9${Number(e.salary).toLocaleString("en-IN")}</td><td>${escapeHtml(e.department)}</td>
+        </tr>`).join("");
+      return `<table><thead><tr><th>id</th><th>name</th><th>age</th><th>salary</th><th>dept</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+    // array of { input, output } pairs
+    if (typeof val[0] === "object" && val[0] !== null && "input" in val[0]) {
+      const rows = val.map(r => `
+        <tr><td>${escapeHtml(r.input)}</td><td class="val">${
+          typeof r.output === "boolean"
+            ? `<span class="${r.output ? "true" : "false"}">${r.output}</span>`
+            : escapeHtml(r.output)
+        }</td></tr>`).join("");
+      return `<table><thead><tr><th>input</th><th>output</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+    // plain array of primitives
+    return val.map(v => `<span class="chip">${escapeHtml(v)}</span>`).join("");
+  }
+  if (typeof val === "object" && val !== null) {
+    return `<table><tbody>${Object.entries(val).map(([k, v]) => `<tr><th>${k}</th><td class="val">${escapeHtml(v)}</td></tr>`).join("")}</tbody></table>`;
+  }
+  if (typeof val === "boolean") {
+    return `<span class="val ${val ? "true" : "false"}">${val}</span>`;
+  }
+  return `<span class="val">${escapeHtml(val)}</span>`;
+}
+
+function renderCards(list, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = list.map((item, i) => `
+    <div class="card">
+      <div class="card-head">
+        <span class="num">${String(i + 1).padStart(2, "0")}</span>
+        <p class="q">${escapeHtml(item.q)}</p>
+        <span class="badge">${escapeHtml(item.method)}</span>
+      </div>
+      <pre class="code">${escapeHtml(item.code)}</pre>
+      <p class="out-lbl">Output</p>
+      <div class="out">${renderValue(item.run())}</div>
+    </div>
+  `).join("");
+}
+
+renderCards(arrayAnswers, "array-cards");
+renderCards(stringAnswers, "string-cards");
+
+document.getElementById("employees-raw").textContent = " " + JSON.stringify(employees, null, 2).replace(/^\{/, "{").slice(0);
+document.getElementById("names-raw").textContent = " " + JSON.stringify(employeeNames, null, 2);
+
+/* Tabs */
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel-section").forEach(s => s.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
