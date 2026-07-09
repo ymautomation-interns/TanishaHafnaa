@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Panel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>User Panel</h1>
+      <div class="header-right">
+        <span id="userDisplay"></span>
+        <button onclick="logout()" class="btn-logout">Logout</button>
+      </div>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-tab" data-tab="students">Students</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <h2>Dashboard</h2>
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total Students</h3>
+          <p class="stat-number" id="studentCount">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Students Tab -->
+    <div id="students" class="tab-content">
+      <h2>Students List</h2>
+      <div class="view-toggle">
+        <button class="btn-view active" data-view="table">Table View</button>
+        <button class="btn-view" data-view="card">Card View</button>
+      </div>
+
+      <!-- Table View -->
+      <div id="table-view" class="view-container active">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Department</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card View -->
+      <div id="card-view" class="view-container">
+        <div class="cards-grid" id="studentsCardView">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="user.js"></script>
+</body>
+</html>

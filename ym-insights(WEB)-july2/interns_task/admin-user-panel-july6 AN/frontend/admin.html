@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Admin Panel</h1>
+      <div class="header-right">
+        <span id="userDisplay"></span>
+        <button onclick="logout()" class="btn-logout">Logout</button>
+      </div>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-tab" data-tab="students">Students</button>
+      <button class="nav-tab" data-tab="add-student">Add Student</button>
+      <button class="nav-tab" data-tab="settings">Settings</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-content active">
+      <h2>Dashboard</h2>
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Total Students</h3>
+          <p class="stat-number" id="studentCount">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Students Tab -->
+    <div id="students" class="tab-content">
+      <h2>Students List</h2>
+      <div class="view-toggle">
+        <button class="btn-view active" data-view="table">Table View</button>
+        <button class="btn-view" data-view="card">Card View</button>
+      </div>
+
+      <!-- Table View -->
+      <div id="table-view" class="view-container active">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Department</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Card View -->
+      <div id="card-view" class="view-container">
+        <div class="cards-grid" id="studentsCardView">
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Student Tab -->
+    <div id="add-student" class="tab-content">
+      <h2>Add/Edit Student</h2>
+      <form id="studentForm" class="form-container">
+        <input type="hidden" id="studentId">
+        <div class="form-group">
+          <label for="studentName">Name</label>
+          <input type="text" id="studentName" required>
+        </div>
+        <div class="form-group">
+          <label for="studentEmail">Email</label>
+          <input type="email" id="studentEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="studentPhone">Phone</label>
+          <input type="tel" id="studentPhone">
+        </div>
+        <div class="form-group">
+          <label for="studentDepartment">Department</label>
+          <input type="text" id="studentDepartment">
+        </div>
+        <button type="submit" class="btn">Save Student</button>
+        <button type="button" id="clearFormBtn" class="btn-secondary" onclick="clearForm()">Clear</button>
+      </form>
+      <div id="formMessage" class="message"></div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings" class="tab-content">
+      <h2>Student Management (CRUD Operations)</h2>
+      
+      <div class="crud-grid">
+        <!-- Create Box -->
+        <div class="crud-box create-box">
+          <div class="crud-header">
+            <h3>Create Student</h3>
+            <span class="crud-icon">➕</span>
+          </div>
+          <form id="createStudentForm" class="form-container">
+            <div class="form-group">
+              <label for="createStudentName">Name</label>
+              <input type="text" id="createStudentName" required>
+            </div>
+            <div class="form-group">
+              <label for="createStudentEmail">Email</label>
+              <input type="email" id="createStudentEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="createStudentPhone">Phone</label>
+              <input type="tel" id="createStudentPhone">
+            </div>
+            <div class="form-group">
+              <label for="createStudentDepartment">Department</label>
+              <input type="text" id="createStudentDepartment">
+            </div>
+            <button type="submit" class="btn btn-create">Create Student</button>
+          </form>
+          <div id="createStudentMessage" class="message"></div>
+        </div>
+
+        <!-- Read Box -->
+        <div class="crud-box read-box">
+          <div class="crud-header">
+            <h3>Read Students</h3>
+            <span class="crud-icon">👁️</span>
+          </div>
+          <button class="btn btn-refresh" onclick="loadStudentsForSettings()">Refresh List</button>
+          <div class="students-list-container">
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Department</th>
+                </tr>
+              </thead>
+              <tbody id="settingsStudentsTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Update Box -->
+        <div class="crud-box update-box">
+          <div class="crud-header">
+            <h3>Update Student</h3>
+            <span class="crud-icon">✏️</span>
+          </div>
+          <form id="updateStudentForm" class="form-container">
+            <input type="hidden" id="updateStudentId">
+            <div class="form-group">
+              <label for="updateStudentName">Name</label>
+              <input type="text" id="updateStudentName" required>
+            </div>
+            <div class="form-group">
+              <label for="updateStudentEmail">Email</label>
+              <input type="email" id="updateStudentEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="updateStudentPhone">Phone</label>
+              <input type="tel" id="updateStudentPhone">
+            </div>
+            <div class="form-group">
+              <label for="updateStudentDepartment">Department</label>
+              <input type="text" id="updateStudentDepartment">
+            </div>
+            <button type="submit" class="btn btn-update">Update Student</button>
+            <button type="button" class="btn-secondary" onclick="clearUpdateStudentForm()">Clear</button>
+          </form>
+          <div id="updateStudentMessage" class="message"></div>
+        </div>
+
+        <!-- Delete Box -->
+        <div class="crud-box delete-box">
+          <div class="crud-header">
+            <h3>Delete Student</h3>
+            <span class="crud-icon">🗑️</span>
+          </div>
+          <div class="delete-container">
+            <div class="form-group">
+              <label for="deleteStudentId">Select Student to Delete</label>
+              <select id="deleteStudentId" required>
+                <option value="">Select Student</option>
+              </select>
+            </div>
+            <button class="btn btn-delete" onclick="deleteSelectedStudent()">Delete Student</button>
+          </div>
+          <div id="deleteStudentMessage" class="message"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <h2>Edit Student</h2>
+      <form id="editStudentForm" class="form-container">
+        <input type="hidden" id="editStudentId">
+        <div class="form-group">
+          <label for="editStudentName">Name</label>
+          <input type="text" id="editStudentName" required>
+        </div>
+        <div class="form-group">
+          <label for="editStudentEmail">Email</label>
+          <input type="email" id="editStudentEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="editStudentPhone">Phone</label>
+          <input type="tel" id="editStudentPhone">
+        </div>
+        <div class="form-group">
+          <label for="editStudentDepartment">Department</label>
+          <input type="text" id="editStudentDepartment">
+        </div>
+        <button type="submit" class="btn">Update Student</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
